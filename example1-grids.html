@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <!-- 设置浏览器渲染规则 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>grids practice</title>
+  </head>
+
+  <body style="text-align: center;">
+    <canvas id="this.canvas" width="602" height="602"></canvas>
+  </body>
+
+  <script>
+    // 网格游戏类
+    function grids (canvas, xNum, yNum, gridWidth) {
+      this.canvas = canvas
+      this.xNum = xNum
+      this.yNum = yNum
+      this.gridWidth = gridWidth
+
+      this.drawGrids = function drawGrids () {
+        // 画格子
+        for (var i = 0; i < this.yNum + 1; i++) {
+          // 画横线
+          this.canvas.beginPath()
+          this.canvas.moveTo(1, i * this.gridWidth + 1)
+          this.canvas.lineTo(601, i * this.gridWidth + 1)
+          this.canvas.closePath()
+          this.canvas.stroke()
+        }
+
+        for (var i = 0; i < this.xNum + 1; i++) {
+          // 画竖线
+          this.canvas.beginPath()
+          this.canvas.moveTo(i * this.gridWidth + 1, 1)
+          this.canvas.lineTo(i * this.gridWidth + 1, 601)
+          this.canvas.closePath()
+          this.canvas.stroke()
+        }
+      }
+
+      // 画x
+      this.drawX = function drawX (i, j) {
+        i -= 1
+        j -= 1
+        // 画左上到右下的直线
+        this.canvas.lineWidth = 2
+        this.canvas.beginPath()
+        this.canvas.moveTo(1 + this.gridWidth / 4 + this.gridWidth * j, 1 + this.gridWidth / 4 + this.gridWidth * i)
+        this.canvas.lineTo(1 + 3 * this.gridWidth / 4 + this.gridWidth * j, 1 + 3 * this.gridWidth / 4 + this.gridWidth * i)
+        this.canvas.closePath()
+        this.canvas.stroke()
+        // 画右上到左下的直线
+        this.canvas.beginPath()
+        this.canvas.moveTo(1 + 3 * this.gridWidth / 4 + this.gridWidth * j, 1 + this.gridWidth / 4 + this.gridWidth * i)
+        this.canvas.lineTo(1 + this.gridWidth / 4 + this.gridWidth * j, 1 + 3 * this.gridWidth / 4 + this.gridWidth * i)
+        this.canvas.closePath()
+        this.canvas.stroke()
+      }
+
+      // 画圈
+      this.drawCircle = function drawCircle (i, j) {
+        i -= 1
+        j -= 1
+        this.canvas.beginPath()
+        this.canvas.arc(1 + this.gridWidth / 2 + this.gridWidth * j, 1 + this.gridWidth / 2 + this.gridWidth * i, this.gridWidth / 4, 0, Math.PI * 2, true)
+        this.canvas.closePath()
+        this.canvas.stroke()
+      }
+
+      // 设置描边颜色，并将网格画好
+      this.canvas.strokeStyle = "rgba(0, 0, 0, 1)"
+      this.drawGrids()
+    }
+
+    // test
+    var gridsObject = new grids(document.getElementById("this.canvas").getContext("2d"), 3, 3, 200)
+    gridsObject.drawX(1, 2)
+    gridsObject.drawCircle(3, 3)
+    gridsObject.drawX(2, 3)
+  </script>
+</html>
