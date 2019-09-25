@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+  <head>
+    <meta charset="utf-8">
+    <!-- 设置浏览器渲染规则 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>grids practice</title>
+    <style>
+      body {
+        display: flex; align-items: center; justify-content: center; height: 90vh; margin: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <canvas id="diffusion" width="400" height="250"></canvas>
+  </body>
+
+  <script>
+    var element = document.getElementById("diffusion")
+    var canvas = element.getContext("2d")
+    var backgroundUrl = "https://www.kkkk1000.com/images/bg.jpg"
+    var showUrl = "https://www.kkkk1000.com/images/bg2.png"
+    var diffusionUrl = "https://www.kkkk1000.com/images/clear.png"
+    var cursorUrl = "https://www.kkkk1000.com/images/mouse.png"
+
+    startFromLoadImg()
+    
+    function startFromLoadImg () {
+      var flag = 0
+      // load show image
+      var showImg = new Image()
+      showImg.src = showUrl
+      showImg.onload = () => {
+        flag++
+        // 两张图片加载完成
+        if (flag == 2) {
+          drawCanvas(showImg, diffusionImg)
+        }
+      }
+      showImg.onerror = () => console.log('展示图片加载失败')
+      // load diffusion image
+      var diffusionImg = new Image()
+      diffusionImg.src = diffusionUrl
+      diffusionImg.onload = () => {
+        flag++
+        // 两张图片加载完成
+        if (flag == 2) {
+          drawCanvas(showImg, diffusionImg)
+        }
+      }
+      diffusionImg.onerror = () => console.log('展示图片加载失败')
+    }
+
+    function drawCanvas(showImg, diffusionImg) {
+      // // 设置canvas的style，背景和cursor
+      element.style.background = 'url(' + backgroundUrl + ')'
+      element.style.backgroundSize = '100% 100%'
+      element.style.cursor = 'url(' + cursorUrl + ') 16 22 , auto'
+     
+      // 画上灰色图覆盖彩色背景
+      canvas.drawImage(showImg, 0, 0, 400, 250)
+
+      // 点击事件逻辑
+      element.addEventListener('click', (e) => {
+        // 获取鼠标在canvas中的位置
+        var x = e.layerX
+        var y = e.layerY
+        canvas.globalCompositeOperation = "destination-out"
+        canvas.drawImage(diffusionImg, x, y)
+        
+        // 缩放比例，即扩散速度
+        var scale = 1
+        window.requestAnimationFrame(draw)
+
+        function draw () {
+          // 扩散到canvas大小时停止
+          if (scale * diffusionImg.width > canvas.width && scale * diffusionImg.height > canvas.height) return
+          // 扩散速度
+          scale *= 1.1
+          // 缩放
+          canvas.drawImage(diffusionImg, x - scale * diffusionImg.width / 2, y - scale * diffusionImg.height / 2,
+                            scale * diffusionImg.width, scale * diffusionImg.height)
+          window.requestAnimationFrame(draw)
+        }
+      })
+    }
+  </script>
+
+</html>

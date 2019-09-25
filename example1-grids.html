@@ -8,7 +8,7 @@
   </head>
 
   <body style="text-align: center;">
-    <canvas id="this.canvas" width="602" height="602"></canvas>
+    <canvas id="grids" width="602" height="602"></canvas>
   </body>
 
   <script>
@@ -19,7 +19,7 @@
       this.yNum = yNum
       this.gridWidth = gridWidth
 
-      this.drawGrids = function drawGrids () {
+      this.drawGrids = function () {
         // 画格子
         for (var i = 0; i < this.yNum + 1; i++) {
           // 画横线
@@ -41,7 +41,7 @@
       }
 
       // 画x
-      this.drawX = function drawX (i, j) {
+      this.drawX = function (i, j) {
         i -= 1
         j -= 1
         // 画左上到右下的直线
@@ -60,7 +60,7 @@
       }
 
       // 画圈
-      this.drawCircle = function drawCircle (i, j) {
+      this.drawCircle = function (i, j) {
         i -= 1
         j -= 1
         this.canvas.beginPath()
@@ -75,7 +75,7 @@
     }
 
     // test
-    var gridsObject = new grids(document.getElementById("this.canvas").getContext("2d"), 3, 3, 200)
+    var gridsObject = new grids(document.getElementById("grids").getContext("2d"), 3, 3, 200)
     gridsObject.drawX(1, 2)
     gridsObject.drawCircle(3, 3)
     gridsObject.drawX(2, 3)
