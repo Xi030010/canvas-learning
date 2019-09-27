@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+  <head>
+    <title>example progress bar</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+      body {
+        display: flex; align-items: center; justify-content: center; height: 90vh; margin: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <canvas id="progess-bar" width="500" height="300"></canvas>
+  </body>
+
+  <script>
+    var progressBar = document.getElementById("progess-bar").getContext("2d")
+    
+    // 初始进度
+    var width = 0
+    window.onload = (e) => {
+      window.requestAnimationFrame(draw)
+    }
+
+    function draw () {
+      // 当前帧, 先清空画布
+      progressBar.clearRect(0, 0, 500, 300)
+
+      progressBar.fillStyle = 'rgb(40, 40, 40)'
+      
+      // 画进度条外边框
+      progressBar.globalCompositeOperation = 'source-over'
+      progressBar.beginPath()
+      progressBar.moveTo(100, 95)
+      progressBar.lineTo(400, 95)
+      // progressBar.moveTo(400, 95)
+      progressBar.arc(400, 125, 30, 3/2 * Math.PI, 1/2 * Math.PI)
+      progressBar.moveTo(400, 155)
+      progressBar.lineTo(100, 155)
+      // progressBar.moveTo(100, 155)
+      progressBar.arc(100, 125, 30, 1/2 * Math.PI, 3/2 * Math.PI)
+      progressBar.fill()
+
+      // 画内边框并截取
+      progressBar.beginPath()
+      progressBar.moveTo(100, 100)
+      progressBar.lineTo(400, 100)
+      // progressBar.moveTo(400, 100)
+      progressBar.arc(400, 125, 25, 3/2 * Math.PI, 1/2 * Math.PI)
+      progressBar.moveTo(400, 150)
+      progressBar.lineTo(100, 150)
+      // progressBar.moveTo(100, 150)
+      progressBar.arc(100, 125, 25, 1/2 * Math.PI, 3/2 * Math.PI)
+      progressBar.globalCompositeOperation = 'destination-out'
+      progressBar.fill()
+
+      progressBar.globalCompositeOperation = 'source-over'
+      progressBar.fillStyle = 'blue'
+      // 左半圆进度
+      if (width <= 25) {
+        // 按进度fill左半圆
+        progressBar.beginPath()
+        progressBar.arc(100, 125, 25, 3/2 * Math.PI - (25 - width) * Math.PI / 50, 1/2 * Math.PI + (25 - width) * Math.PI / 50, true)
+        progressBar.fill()
+      }
+      // 中间横条进度
+      else if (width < 325 && width > 25) {
+        // 按进度fill左半圆和中间横条
+        progressBar.beginPath()
+        progressBar.moveTo(100 + width - 25, 100)
+        progressBar.lineTo(100, 100)
+        progressBar.arc(100, 125, 25, 3/2 * Math.PI, 1/2 * Math.PI, true)
+        progressBar.lineTo(100 + width - 25, 150)
+        progressBar.fill()
+      }
+      // 右半圆进度
+      else if (width >= 325 && width <= 350) {
+        // fill左半圆和中间横条
+        progressBar.beginPath()
+        progressBar.moveTo(400, 100)
+        progressBar.lineTo(100, 100)
+        progressBar.arc(100, 125, 25, 3/2 * Math.PI, 1/2 * Math.PI, true)
+        progressBar.lineTo(400, 150)
+        progressBar.arc(400, 125, 25, 1/2 * Math.PI, 3/2 * Math.PI, true)
+        progressBar.fill()
+
+        // 按进度fill右半圆
+        if (width < 350) {
+          progressBar.beginPath()
+          progressBar.arc(400, 125, 25, 1/2 * Math.PI - Math.PI * (width - 325) / 50, 3/2 * Math.PI + Math.PI * (width - 325) / 50, true)
+          progressBar.fillStyle = "white"
+          progressBar.fill()
+        }
+      }
+
+      progressBar.font = "50px serif";
+      // 超过进度条总长度直接设为100%, 并向左平移10
+      if (width >= 350) {
+        progressBar.strokeText('100%', 205, 200)
+      }
+      else {
+        progressBar.strokeText(Math.round((width / 350) * 100) + '%', 215, 200)
+      }
+      
+      if (width < 350) {
+        // 进度条速度
+        width += 10
+        window.requestAnimationFrame(draw)
+      }
+    }
+  </script>
+</html>

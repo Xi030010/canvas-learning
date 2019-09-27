@@ -67,6 +67,7 @@
         // 获取鼠标在canvas中的位置
         var x = e.layerX
         var y = e.layerY
+        console.log(e)
         canvas.globalCompositeOperation = "destination-out"
         canvas.drawImage(diffusionImg, x, y)
         
