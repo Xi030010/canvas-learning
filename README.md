@@ -15,3 +15,6 @@ experience
   1. 闭合路径时要注意arc的起始点位置
   2. arc不闭合stroke的话可以画圆弧
   3. 动画每帧先清空一下画布比较好
+
+links
+  1. canvas-learning：分享一些本人学习canvas时用来练习的案例 https://segmentfault.com/a/1190000007522378
